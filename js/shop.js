@@ -7,6 +7,8 @@ var cart = [];
 var total = 0;
 
 // Exercise 1
+// Comentado para corrección
+/*
 function buy(id) {
     let midaArrProducts = PRODUCTS.length;
 
@@ -19,6 +21,7 @@ function buy(id) {
         }
     }
 }
+*/
 
 // Exercise 2
 function cleanCart() {
@@ -28,7 +31,7 @@ function cleanCart() {
         cartList.length = 0;
         cart.length = 0;
         total = 0;
-        printCart()
+        printCart();
     };
 }
 
@@ -59,6 +62,8 @@ function calculateTotal() {
 }
 
 // Exercise 4
+// Comentado para corrección
+/*
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
@@ -81,8 +86,9 @@ function generateCart() {
             cart[found].subtotalWithDiscount = cart[found].subtotal;
         }
     }
-    applyPromotionsCart()
+    applyPromotionsCart();
 }
+*/
 
 // Exercise 5
 function applyPromotionsCart() {
@@ -96,7 +102,7 @@ function applyPromotionsCart() {
         }
 
         if (item.name === 'Instant cupcake mixture' && item.quantity > 9) {
-            item.subtotalWithDiscount = Math.round(item.subtotalWithDiscount * (2 / 3) * 100) / 100;
+            item.subtotalWithDiscount = Math.round(item.quantity * (item.price * 2 / 3) * 100) / 100;
             // Devuelve number con 2 decimales (Number() con .toFixed(2) redondean de forma no deseada)
         }
     }
@@ -131,6 +137,27 @@ function addToCart(id) {
     // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
+    let found, lastCartItem;
+
+    for (let product of PRODUCTS) {
+
+        if (product.id === id) {
+            found = cart.findIndex((element) => element.id === product.id);
+
+            if (found === -1) {
+                cart.push(product);
+                lastCartItem = cart.at(-1); // Devuelve último elemento del array.
+                lastCartItem.quantity = 1;
+                lastCartItem.subtotal = lastCartItem.price * lastCartItem.quantity;
+                lastCartItem.subtotalWithDiscount = lastCartItem.subtotal; // Reservamos propiedad para calcular más adelante
+            } else {
+                cart[found].quantity++;
+                cart[found].subtotal = cart[found].price * cart[found].quantity;
+                cart[found].subtotalWithDiscount = cart[found].subtotal;
+            }
+            applyPromotionsCart();
+        }
+    }
 }
 
 // Exercise 9
@@ -141,7 +168,7 @@ function removeFromCart(id) {
 
 function open_modal() {
     console.log("Open Modal");
-    generateCart();
+    addToCart();
     calculateTotal();
     printCart();
 }
