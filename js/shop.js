@@ -15,6 +15,7 @@ function buy(id) {
     if (PRODUCTS[i].id === id) {
       // 2. Add found product to the cartList array
       cartList.push(PRODUCTS[i]);
+      calculateTotal();
       break; // Finaliza iteración para no sobrecargar aplicación al recorrer todo el array
     }
   }
@@ -23,11 +24,17 @@ function buy(id) {
 // Exercise 2
 function cleanCart() {
   cartList.length = 0;
+  total = 0;
 }
 
 // Exercise 3
 function calculateTotal() {
   // Calculate total price of the cart using the "cartList" array
+  total = 0;
+  let midaArrCartList = cartList.length;
+  for (let i = 0; i < midaArrCartList; i++) {
+    total += cartList[i].price;
+  }
 }
 
 // Exercise 4
