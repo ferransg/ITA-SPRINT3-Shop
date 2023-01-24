@@ -7,8 +7,9 @@ var cart = [];
 var total = 0;
 
 // Exercise 1
-// Comentado para corrección
-/*
+
+/* Comentado para corrección:
+
 function buy(id) {
     let midaArrProducts = PRODUCTS.length;
 
@@ -51,19 +52,23 @@ function calculateTotal() {
 */
 
 // Misma función pero con el total con los descuentos incluidos:
-function calculateTotal() {
+function calculateSubtotals() {
     // Calculate total price of the cart
     total = 0;
     let midaArrCart = cart.length; // Variable medida array evita consulta en cada iteración.
 
     for (let i = 0; i < midaArrCart; i++) {
+        cart[i].subtotal = cart[i].price * cart[i].quantity;
+        cart[i].subtotalWithDiscount = cart[i].subtotal;
+        applyPromotionsCart();
         total += cart[i].subtotalWithDiscount;
     }
 }
 
 // Exercise 4
-// Comentado para corrección
-/*
+
+/* Comentado para corrección
+
 function generateCart() {
     // Using the "cartlist" array that contains all the items in the shopping cart,
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
@@ -146,29 +151,33 @@ function addToCart(id) {
 
             if (found === -1) {
                 cart.push(product);
-                lastCartItem = cart.at(-1); // Devuelve último elemento del array.
-                lastCartItem.quantity = 1;
-                lastCartItem.subtotal = lastCartItem.price * lastCartItem.quantity;
-                lastCartItem.subtotalWithDiscount = lastCartItem.subtotal; // Reservamos propiedad para calcular más adelante
+                cart.at(-1).quantity = 1;
             } else {
                 cart[found].quantity++;
-                cart[found].subtotal = cart[found].price * cart[found].quantity;
-                cart[found].subtotalWithDiscount = cart[found].subtotal;
             }
-            applyPromotionsCart();
+            calculateSubtotals();
         }
     }
 }
 
 // Exercise 9
 function removeFromCart(id) {
-    // 1. Loop for to the array products to get the item to add to cart
-    // 2. Add found product to the cartList array
+    let removeItem = cart.findIndex((element) => element.id === id);
+
+    removeItem === -1 ? alert('This product is not in your cart!') : cart[removeItem].quantity--;
+
+    if (removeItem !== -1) {
+        if (cart[removeItem].quantity < 1) {
+            cart.splice(removeItem, 1);
+        }
+    }
+    calculateSubtotals();
+    printCart();
 }
 
 function open_modal() {
     console.log("Open Modal");
     addToCart();
-    calculateTotal();
+    calculateSubtotals();
     printCart();
 }
