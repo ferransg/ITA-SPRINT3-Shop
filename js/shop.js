@@ -54,18 +54,32 @@ function generateCart() {
             cart.push(cartList[i]);
             lastCartItem = cart.at(-1); // Devuelve cart[cart.length - 1] Último elemento del array.
             lastCartItem.quantity = 1;
+            lastCartItem.subtotal = lastCartItem.price * lastCartItem.quantity;
+            lastCartItem.subtotalWithDiscount = lastCartItem.subtotal; // Reservamos propiedad para calcular más adelante
         } else {
             cart[found].quantity++;
+            cart[found].subtotal = cart[found].price * cart[found].quantity;
+            cart[found].subtotalWithDiscount = cart[found].subtotal;
         }
-
-        lastCartItem.subtotal = lastCartItem.price * lastCartItem.quantity;
-        lastCartItem.subtotalWithDiscount = 0; // Reservamos propiedad para calcular más adelante
     }
+    applyPromotionsCart()
 }
 
 // Exercise 5
 function applyPromotionsCart() {
     // Apply promotions to each item in the array "cart"
+
+    for (let item of cart) {
+
+        if (item.name === 'cooking oil' && item.quantity > 2) {
+            item.subtotalWithDiscount = item.quantity * 10;
+            continue;
+        }
+
+        if (item.name === 'Instant cupcake mixture' && item.quantity > 9) {
+            item.subtotalWithDiscount *= (2 / 3);
+        }
+    }
 }
 
 // Exercise 6
