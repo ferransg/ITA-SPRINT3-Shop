@@ -21,7 +21,9 @@ function buy(id) {
 } // Con ES6 se podría utilizar .find()
 
 // Exercise 2
-function cleanCart() {}
+function cleanCart() {
+  cartList.length = 0;
+}
 
 // Exercise 3
 function calculateTotal() {
