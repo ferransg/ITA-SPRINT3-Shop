@@ -15,20 +15,27 @@ function buy(id) {
         if (PRODUCTS[i].id === id) {
             // 2. Add found product to the cartList array
             cartList.push(PRODUCTS[i]);
-            calculateTotal();
             break; // Finaliza iteración para no sobrecargar aplicación al recorrer todo el array
         }
     }
-} // Con ES6 se podría utilizar .find()
+}
 
 // Exercise 2
 function cleanCart() {
-    cartList.length = 0;
-    cart.length = 0;
-    total = 0;
+    let confirmar = confirm("Are you sure you want to remove your cart?");
+
+    if (confirmar) {
+        cartList.length = 0;
+        cart.length = 0;
+        total = 0;
+        printCart()
+    };
 }
 
 // Exercise 3
+
+/* Versión anterior comentada para corrección:
+
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
     total = 0;
@@ -36,6 +43,18 @@ function calculateTotal() {
 
     for (let i = 0; i < midaArrCartList; i++) {
         total += cartList[i].price;
+    }
+}
+*/
+
+// Misma función pero con el total con los descuentos incluidos:
+function calculateTotal() {
+    // Calculate total price of the cart
+    total = 0;
+    let midaArrCart = cart.length; // Variable medida array evita consulta en cada iteración.
+
+    for (let i = 0; i < midaArrCart; i++) {
+        total += cart[i].subtotalWithDiscount;
     }
 }
 
@@ -77,7 +96,8 @@ function applyPromotionsCart() {
         }
 
         if (item.name === 'Instant cupcake mixture' && item.quantity > 9) {
-            item.subtotalWithDiscount *= (2 / 3);
+            item.subtotalWithDiscount = Math.round(item.subtotalWithDiscount * (2 / 3) * 100) / 100;
+            // Devuelve number con 2 decimales (Number() con .toFixed(2) redondean de forma no deseada)
         }
     }
 }
@@ -85,18 +105,35 @@ function applyPromotionsCart() {
 // Exercise 6
 function printCart() {
     // Fill the shopping cart modal manipulating the shopping cart dom
+    document.querySelectorAll("#cart_list tr").forEach(element => element.remove()); // Limpia la plantilla modal
+
+    let modalList = document.querySelector("#cart_list");
+    let midaArrCart = cart.length;
+
+    for (let i = 0; i < midaArrCart; i++) {
+        modalList.innerHTML +=
+            `<tr>
+                <th scope="row">${cart[i].name}</th>
+                <td>€${cart[i].price}</td>
+                <td>${cart[i].quantity}</td>
+                <td>€${cart[i].subtotalWithDiscount}</td>
+            </tr>`;
+    }
+
+    let modalTotalPrice = document.querySelector("#total_price");
+    modalTotalPrice.innerHTML = Math.round(total * 100) / 100;
 }
 
 // ** Nivell II **
 
-// Exercise 7
+// Exercise 8
 function addToCart(id) {
     // Refactor previous code in order to simplify it
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cart array or update its quantity in case it has been added previously.
 }
 
-// Exercise 8
+// Exercise 9
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
@@ -104,5 +141,7 @@ function removeFromCart(id) {
 
 function open_modal() {
     console.log("Open Modal");
+    generateCart();
+    calculateTotal();
     printCart();
 }

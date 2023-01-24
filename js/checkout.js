@@ -1,5 +1,5 @@
 
-// Exercise 6
+// Exercise 7
 function validate() {
 	var error = 0;
 	// Get the input fields
@@ -8,20 +8,20 @@ function validate() {
 
 	// Get the error elements
 	var errorName = document.getElementById("errorName");
-	var errorEmail = document.getElementById("errorEmail");  
-	
+	var errorEmail = document.getElementById("errorEmail");
+
 	// Validate fields entered by the user: name, phone, password, and email
-	if(fName.value == ""){
+	if (fName.value == "") {
 		error++;
 	}
 
-	if(fEmail.value == ""){
+	if (fEmail.value == "") {
 		error++;
 	}
-	 
-	if(error>0){
+
+	if (error > 0) {
 		alert("Error");
-	}else{
+	} else {
 		alert("OK");
 	}
 
